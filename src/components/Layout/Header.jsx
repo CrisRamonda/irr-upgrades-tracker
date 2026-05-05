@@ -4,7 +4,7 @@ export function Header() {
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 flex items-center justify-center bg-status-ready/20 rounded-lg overflow-hidden">
           <img 
-            src="/logo.jfif" 
+            src="/logo.png" 
             alt="IRR Logo" 
             className="max-w-full max-h-full w-auto h-auto object-contain"
           />
