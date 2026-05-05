@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0f0f0f;
+  color: #e5e5e5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+@layer components {
+  .card-tactical {
+    @apply bg-tactical-card border border-tactical-border rounded-lg;
+  }
+
+  .btn-primary {
+    @apply bg-status-accent text-white px-4 py-2 rounded-md font-medium 
+           hover:bg-opacity-90 transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply bg-status-locked text-white px-4 py-2 rounded-md font-medium 
+           hover:bg-opacity-90 transition-all duration-200;
+  }
+
+  .input-dark {
+    @apply bg-tactical-elevated border border-tactical-border rounded-md 
+           px-3 py-2 text-tactical-text placeholder-tactical-muted
+           focus:outline-none focus:border-status-accent transition-colors;
+  }
+
+  .checkbox-custom {
+    @apply w-5 h-5 rounded border-2 border-tactical-border 
+           bg-tactical-elevated cursor-pointer
+           checked:bg-status-ready checked:border-status-ready
+           focus:ring-2 focus:ring-status-accent focus:ring-offset-0
+           transition-all duration-150;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}

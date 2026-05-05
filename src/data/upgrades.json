@@ -1,0 +1,475 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-05-05",
+  "categories": [
+    { "id": "intel", "name": "Intel" },
+    { "id": "stash", "name": "Stash" },
+    { "id": "generator", "name": "Generator" },
+    { "id": "gunsmith", "name": "Gunsmith" },
+    { "id": "lightning", "name": "Lightning" },
+    { "id": "repair", "name": "Repair" },
+    { "id": "terminal", "name": "Terminal" },
+    { "id": "structure", "name": "Structure" },
+    { "id": "shooting_range", "name": "Shooting Range" },
+    { "id": "mission", "name": "Mission Items" }
+  ],
+  "upgrades": [
+    {
+      "id": "intel_1",
+      "name": "Intel 1",
+      "category": "intel",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "antenna_piece_1", "name": "Antenna Piece 1", "quantity": 1 },
+          { "itemId": "power_cable", "name": "Power Cable", "quantity": 1 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 700 }
+        ],
+        "factions": [],
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "intel_2",
+      "name": "Intel 2",
+      "category": "intel",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "antenna_piece_2", "name": "Antenna Piece 2", "quantity": 1 },
+          { "itemId": "hard_drive", "name": "Hard Drive", "quantity": 1 },
+          { "itemId": "military_laptop", "name": "Military Laptop", "quantity": 1 },
+          { "itemId": "film_case", "name": "Film Case", "quantity": 2 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 1400 },
+          { "itemId": "metal", "name": "Metal", "quantity": 1800 },
+          { "itemId": "oil", "name": "Oil", "quantity": 1400 }
+        ],
+        "factions": [],
+        "prerequisites": ["terminal_1"]
+      }
+    },
+    {
+      "id": "intel_3",
+      "name": "Intel 3",
+      "category": "intel",
+      "tier": 3,
+      "requirements": {
+        "items": [
+          { "itemId": "motherboard", "name": "Motherboard", "quantity": 1 },
+          { "itemId": "hard_drive", "name": "Hard Drive", "quantity": 3 },
+          { "itemId": "power_cable", "name": "Power Cable", "quantity": 1 },
+          { "itemId": "dlsr", "name": "DLSR", "quantity": 1 },
+          { "itemId": "antenna_piece_3", "name": "Antenna Piece 3", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 5000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 4800 },
+          { "itemId": "metal", "name": "Metal", "quantity": 2700 },
+          { "itemId": "oil", "name": "Oil", "quantity": 2100 }
+        ],
+        "factions": [
+          { "factionId": "igc", "name": "IGC", "level": 2 },
+          { "factionId": "player", "name": "Player", "level": 20 }
+        ],
+        "prerequisites": ["generator_2"]
+      }
+    },
+    {
+      "id": "stash_1",
+      "name": "Stash 1",
+      "category": "stash",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "canteen", "name": "Canteen", "quantity": 2 },
+          { "itemId": "bandage", "name": "Bandage", "quantity": 4 },
+          { "itemId": "painkiller", "name": "Painkiller", "quantity": 2 },
+          { "itemId": "revive_syringe", "name": "Revive Syringe", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 2000 },
+          { "itemId": "food", "name": "Food", "quantity": 1400 },
+          { "itemId": "metal", "name": "Metal", "quantity": 700 }
+        ],
+        "factions": [],
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "stash_2",
+      "name": "Stash 2",
+      "category": "stash",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "food_container", "name": "Food Container", "quantity": 3 },
+          { "itemId": "fuel", "name": "Fuel", "quantity": 2 },
+          { "itemId": "shaving_cream", "name": "Shaving Cream", "quantity": 1 },
+          { "itemId": "old_chemical_bottle", "name": "Old Chemical Bottle", "quantity": 3 },
+          { "itemId": "cash", "name": "Cash", "quantity": 8000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 2100 },
+          { "itemId": "food", "name": "Food", "quantity": 2800 },
+          { "itemId": "metal", "name": "Metal", "quantity": 700 },
+          { "itemId": "oil", "name": "Oil", "quantity": 1400 }
+        ],
+        "factions": [
+          { "factionId": "vlf", "name": "VLF", "level": 2 }
+        ],
+        "prerequisites": ["structure_2"]
+      }
+    },
+    {
+      "id": "stash_3",
+      "name": "Stash 3",
+      "category": "stash",
+      "tier": 3,
+      "requirements": {
+        "items": [
+          { "itemId": "old_radio", "name": "Old Radio", "quantity": 1 },
+          { "itemId": "old_communicator", "name": "Old Communicator", "quantity": 1 },
+          { "itemId": "honey_badger", "name": "Honey Badger", "quantity": 1 },
+          { "itemId": "desert_tech_srs_a2", "name": "Desert Tech SRS A2", "quantity": 1 },
+          { "itemId": "300_blackout", "name": ".300 Blackout", "quantity": 30 },
+          { "itemId": "cash", "name": "Cash", "quantity": 40000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 2800 },
+          { "itemId": "food", "name": "Food", "quantity": 5600 },
+          { "itemId": "metal", "name": "Metal", "quantity": 2800 },
+          { "itemId": "oil", "name": "Oil", "quantity": 2100 }
+        ],
+        "factions": [],
+        "prerequisites": ["shooting_range_2"]
+      }
+    },
+    {
+      "id": "stash_4",
+      "name": "Stash 4",
+      "category": "stash",
+      "tier": 4,
+      "requirements": {
+        "items": [
+          { "itemId": "concrete", "name": "Concrete", "quantity": 10000 },
+          { "itemId": "food", "name": "Food", "quantity": 10000 },
+          { "itemId": "metal", "name": "Metal", "quantity": 10000 },
+          { "itemId": "oil", "name": "Oil", "quantity": 10000 }
+        ],
+        "factions": [
+          { "factionId": "uics", "name": "UICS", "level": 4 },
+          { "factionId": "vlf", "name": "VLF", "level": 4 },
+          { "factionId": "igc", "name": "IGC", "level": 4 }
+        ],
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "generator_1",
+      "name": "Generator 1",
+      "category": "generator",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "generator", "name": "Generator", "quantity": 1 },
+          { "itemId": "gas_can", "name": "Gas Can", "quantity": 1 },
+          { "itemId": "power_cable", "name": "Power Cable", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 1000 },
+          { "itemId": "oil", "name": "Oil", "quantity": 700 }
+        ],
+        "factions": [],
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "generator_2",
+      "name": "Generator 2",
+      "category": "generator",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "generator", "name": "Generator", "quantity": 2 },
+          { "itemId": "gas_can", "name": "Gas Can", "quantity": 2 },
+          { "itemId": "power_cable", "name": "Power Cable", "quantity": 2 },
+          { "itemId": "plastic_wire_spool", "name": "Plastic Wire Spool", "quantity": 2 },
+          { "itemId": "cash", "name": "Cash", "quantity": 3000 },
+          { "itemId": "metal", "name": "Metal", "quantity": 4200 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 700 }
+        ],
+        "factions": [],
+        "prerequisites": ["structure_2"]
+      }
+    },
+    {
+      "id": "gunsmith_1",
+      "name": "Gunsmith 1",
+      "category": "gunsmith",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "toolbox", "name": "Toolbox", "quantity": 1 },
+          { "itemId": "spraycan", "name": "Spraycan", "quantity": 1 },
+          { "itemId": "duct_tape", "name": "Duct Tape", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 5000 },
+          { "itemId": "metal", "name": "Metal", "quantity": 2100 }
+        ],
+        "factions": [
+          { "factionId": "igc", "name": "IGC", "level": 1 }
+        ],
+        "prerequisites": []
+      }
+    },
+    {
+      "id": "gunsmith_2",
+      "name": "Gunsmith 2",
+      "category": "gunsmith",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "hammer", "name": "Hammer", "quantity": 1 },
+          { "itemId": "spraycan", "name": "Spraycan", "quantity": 2 },
+          { "itemId": "duct_tape", "name": "Duct Tape", "quantity": 8 },
+          { "itemId": "paintbrush", "name": "Paintbrush", "quantity": 2 },
+          { "itemId": "battery_pp3", "name": "Battery PP3", "quantity": 2 },
+          { "itemId": "cash", "name": "Cash", "quantity": 15000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 700 },
+          { "itemId": "food", "name": "Food", "quantity": 700 },
+          { "itemId": "metal", "name": "Metal", "quantity": 4100 },
+          { "itemId": "oil", "name": "Oil", "quantity": 3600 }
+        ],
+        "factions": [
+          { "factionId": "uics", "name": "UICS", "level": 3 }
+        ],
+        "prerequisites": ["repair_2"]
+      }
+    },
+    {
+      "id": "gunsmith_3",
+      "name": "Gunsmith 3",
+      "category": "gunsmith",
+      "tier": 3,
+      "requirements": {
+        "items": [
+          { "itemId": "hammer", "name": "Hammer", "quantity": 1 },
+          { "itemId": "toolbox", "name": "Toolbox", "quantity": 2 },
+          { "itemId": "duct_tape", "name": "Duct Tape", "quantity": 8 },
+          { "itemId": "remington_m700", "name": "Remington M700", "quantity": 1 },
+          { "itemId": "battery_car", "name": "Battery Car", "quantity": 2 },
+          { "itemId": "cash", "name": "Cash", "quantity": 30000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 1500 },
+          { "itemId": "food", "name": "Food", "quantity": 1500 },
+          { "itemId": "metal", "name": "Metal", "quantity": 6000 },
+          { "itemId": "oil", "name": "Oil", "quantity": 6000 }
+        ],
+        "factions": [],
+        "prerequisites": ["repair_2"]
+      }
+    },
+    {
+      "id": "lightning_1",
+      "name": "Lightning 1",
+      "category": "lightning",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "old_flashlight", "name": "Old Flashlight", "quantity": 2 },
+          { "itemId": "plastic_wire_spool", "name": "Plastic Wire Spool", "quantity": 2 },
+          { "itemId": "nails", "name": "Nails", "quantity": 2 },
+          { "itemId": "cash", "name": "Cash", "quantity": 2000 },
+          { "itemId": "oil", "name": "Oil", "quantity": 1400 }
+        ],
+        "factions": [],
+        "prerequisites": ["generator_1"]
+      }
+    },
+    {
+      "id": "lightning_2",
+      "name": "Lightning 2",
+      "category": "lightning",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "battery_car", "name": "Battery Car", "quantity": 2 },
+          { "itemId": "plastic_wire_spool", "name": "Plastic Wire Spool", "quantity": 2 },
+          { "itemId": "nails", "name": "Nails", "quantity": 4 },
+          { "itemId": "battery_18650", "name": "Battery 18650", "quantity": 6 },
+          { "itemId": "cash", "name": "Cash", "quantity": 4000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 1400 },
+          { "itemId": "oil", "name": "Oil", "quantity": 2100 }
+        ],
+        "factions": [],
+        "prerequisites": ["generator_2"]
+      }
+    },
+    {
+      "id": "repair_1",
+      "name": "Repair 1",
+      "category": "repair",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "toolbox", "name": "Toolbox", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 4000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 700 },
+          { "itemId": "metal", "name": "Metal", "quantity": 700 }
+        ],
+        "factions": [],
+        "prerequisites": ["generator_1"]
+      }
+    },
+    {
+      "id": "repair_2",
+      "name": "Repair 2",
+      "category": "repair",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "polishing_oil", "name": "Polishing Oil", "quantity": 3 },
+          { "itemId": "duct_tape", "name": "Duct Tape", "quantity": 4 },
+          { "itemId": "bolt_cutter", "name": "Bolt Cutter", "quantity": 1 },
+          { "itemId": "d3crm_rig", "name": "D3CRM Rig", "quantity": 1 },
+          { "itemId": "virtus_rig", "name": "Virtus Rig", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 15000 },
+          { "itemId": "oil", "name": "Oil", "quantity": 4100 },
+          { "itemId": "food", "name": "Food", "quantity": 700 },
+          { "itemId": "metal", "name": "Metal", "quantity": 1400 }
+        ],
+        "factions": [
+          { "factionId": "igc", "name": "IGC", "level": 3 }
+        ],
+        "prerequisites": ["stash_2", "lightning_2"]
+      }
+    },
+    {
+      "id": "terminal_1",
+      "name": "Terminal 1",
+      "category": "terminal",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "hard_drive", "name": "Hard Drive", "quantity": 1 },
+          { "itemId": "fuel", "name": "Fuel", "quantity": 1 },
+          { "itemId": "earth_globe", "name": "Earth Globe", "quantity": 1 },
+          { "itemId": "compass", "name": "Compass", "quantity": 1 },
+          { "itemId": "old_radio", "name": "Old Radio", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 6000 },
+          { "itemId": "food", "name": "Food", "quantity": 1400 },
+          { "itemId": "oil", "name": "Oil", "quantity": 700 }
+        ],
+        "factions": [
+          { "factionId": "vlf", "name": "VLF", "level": 2 }
+        ],
+        "prerequisites": ["generator_1"]
+      }
+    },
+    {
+      "id": "structure_2",
+      "name": "Structure 2",
+      "category": "structure",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "bathroom_cleaner", "name": "Bathroom Cleaner", "quantity": 4 },
+          { "itemId": "saw", "name": "Saw", "quantity": 1 },
+          { "itemId": "rope", "name": "Rope", "quantity": 2 },
+          { "itemId": "fan", "name": "Fan", "quantity": 4 },
+          { "itemId": "mining_battery", "name": "Mining Battery", "quantity": 1 },
+          { "itemId": "cash", "name": "Cash", "quantity": 20000 },
+          { "itemId": "concrete", "name": "Concrete", "quantity": 3200 },
+          { "itemId": "metal", "name": "Metal", "quantity": 1800 }
+        ],
+        "factions": [],
+        "prerequisites": ["repair_1", "gunsmith_1", "stash_1"]
+      }
+    },
+    {
+      "id": "shooting_range_2",
+      "name": "Shooting Range 2",
+      "category": "shooting_range",
+      "tier": 2,
+      "requirements": {
+        "items": [
+          { "itemId": "concrete", "name": "Concrete", "quantity": 5600 },
+          { "itemId": "metal", "name": "Metal", "quantity": 4900 },
+          { "itemId": "oil", "name": "Oil", "quantity": 400 }
+        ],
+        "factions": [],
+        "prerequisites": ["gunsmith_2"]
+      }
+    },
+    {
+      "id": "mission_items",
+      "name": "Mission Items",
+      "category": "mission",
+      "tier": 1,
+      "requirements": {
+        "items": [
+          { "itemId": "cuban_cigar", "name": "Cuban Cigar", "quantity": 1 },
+          { "itemId": "thang_long_cigarettes", "name": "Thang Long Cigarettes", "quantity": 1 },
+          { "itemId": "marlboro_red_cigarettes", "name": "Marlboro Red Cigarettes", "quantity": 1 },
+          { "itemId": "beer_biasaigon", "name": "Beer Biasaigon", "quantity": 1 },
+          { "itemId": "beer_biere_larue", "name": "Beer Biere Larue", "quantity": 1 }
+        ],
+        "factions": [],
+        "prerequisites": []
+      }
+    }
+  ],
+  "items": [
+    { "id": "antenna_piece_1", "name": "Antenna Piece 1" },
+    { "id": "antenna_piece_2", "name": "Antenna Piece 2" },
+    { "id": "antenna_piece_3", "name": "Antenna Piece 3" },
+    { "id": "power_cable", "name": "Power Cable" },
+    { "id": "concrete", "name": "Concrete" },
+    { "id": "hard_drive", "name": "Hard Drive" },
+    { "id": "military_laptop", "name": "Military Laptop" },
+    { "id": "film_case", "name": "Film Case" },
+    { "id": "metal", "name": "Metal" },
+    { "id": "oil", "name": "Oil" },
+    { "id": "motherboard", "name": "Motherboard" },
+    { "id": "dlsr", "name": "DLSR" },
+    { "id": "cash", "name": "Cash" },
+    { "id": "canteen", "name": "Canteen" },
+    { "id": "bandage", "name": "Bandage" },
+    { "id": "painkiller", "name": "Painkiller" },
+    { "id": "revive_syringe", "name": "Revive Syringe" },
+    { "id": "food", "name": "Food" },
+    { "id": "food_container", "name": "Food Container" },
+    { "id": "fuel", "name": "Fuel" },
+    { "id": "shaving_cream", "name": "Shaving Cream" },
+    { "id": "old_chemical_bottle", "name": "Old Chemical Bottle" },
+    { "id": "old_radio", "name": "Old Radio" },
+    { "id": "old_communicator", "name": "Old Communicator" },
+    { "id": "honey_badger", "name": "Honey Badger" },
+    { "id": "desert_tech_srs_a2", "name": "Desert Tech SRS A2" },
+    { "id": "300_blackout", "name": ".300 Blackout" },
+    { "id": "generator", "name": "Generator" },
+    { "id": "gas_can", "name": "Gas Can" },
+    { "id": "plastic_wire_spool", "name": "Plastic Wire Spool" },
+    { "id": "toolbox", "name": "Toolbox" },
+    { "id": "spraycan", "name": "Spraycan" },
+    { "id": "duct_tape", "name": "Duct Tape" },
+    { "id": "hammer", "name": "Hammer" },
+    { "id": "paintbrush", "name": "Paintbrush" },
+    { "id": "battery_pp3", "name": "Battery PP3" },
+    { "id": "remington_m700", "name": "Remington M700" },
+    { "id": "battery_car", "name": "Battery Car" },
+    { "id": "old_flashlight", "name": "Old Flashlight" },
+    { "id": "nails", "name": "Nails" },
+    { "id": "battery_18650", "name": "Battery 18650" },
+    { "id": "polishing_oil", "name": "Polishing Oil" },
+    { "id": "bolt_cutter", "name": "Bolt Cutter" },
+    { "id": "d3crm_rig", "name": "D3CRM Rig" },
+    { "id": "virtus_rig", "name": "Virtus Rig" },
+    { "id": "earth_globe", "name": "Earth Globe" },
+    { "id": "compass", "name": "Compass" },
+    { "id": "bathroom_cleaner", "name": "Bathroom Cleaner" },
+    { "id": "saw", "name": "Saw" },
+    { "id": "rope", "name": "Rope" },
+    { "id": "fan", "name": "Fan" },
+    { "id": "mining_battery", "name": "Mining Battery" },
+    { "id": "cuban_cigar", "name": "Cuban Cigar" },
+    { "id": "thang_long_cigarettes", "name": "Thang Long Cigarettes" },
+    { "id": "marlboro_red_cigarettes", "name": "Marlboro Red Cigarettes" },
+    { "id": "beer_biasaigon", "name": "Beer Biasaigon" },
+    { "id": "beer_biere_larue", "name": "Beer Biere Larue" }
+  ],
+  "factions": [
+    { "id": "igc", "name": "IGC" },
+    { "id": "vlf", "name": "VLF" },
+    { "id": "uics", "name": "UICS" },
+    { "id": "player", "name": "Player" }
+  ]
+}
