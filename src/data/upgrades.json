@@ -45,7 +45,7 @@
           { "itemId": "oil", "name": "Oil", "quantity": 1400 }
         ],
         "factions": [],
-        "prerequisites": ["terminal_1"]
+        "prerequisites": ["intel_1", "terminal_1"]
       }
     },
     {
@@ -69,7 +69,7 @@
           { "factionId": "igc", "name": "IGC", "level": 2 },
           { "factionId": "player", "name": "Player", "level": 20 }
         ],
-        "prerequisites": ["generator_2"]
+        "prerequisites": ["intel_2", "generator_2"]
       }
     },
     {
@@ -111,7 +111,7 @@
         "factions": [
           { "factionId": "vlf", "name": "VLF", "level": 2 }
         ],
-        "prerequisites": ["structure_2"]
+        "prerequisites": ["stash_1", "structure_2"]
       }
     },
     {
@@ -133,7 +133,7 @@
           { "itemId": "oil", "name": "Oil", "quantity": 2100 }
         ],
         "factions": [],
-        "prerequisites": ["shooting_range_2"]
+        "prerequisites": ["stash_2", "shooting_range_2"]
       }
     },
     {
@@ -153,7 +153,7 @@
           { "factionId": "vlf", "name": "VLF", "level": 4 },
           { "factionId": "igc", "name": "IGC", "level": 4 }
         ],
-        "prerequisites": []
+        "prerequisites": ["stash_3"]
       }
     },
     {
@@ -189,7 +189,7 @@
           { "itemId": "concrete", "name": "Concrete", "quantity": 700 }
         ],
         "factions": [],
-        "prerequisites": ["structure_2"]
+        "prerequisites": ["generator_1", "structure_2"]
       }
     },
     {
@@ -232,7 +232,7 @@
         "factions": [
           { "factionId": "uics", "name": "UICS", "level": 3 }
         ],
-        "prerequisites": ["repair_2"]
+        "prerequisites": ["gunsmith_1", "repair_2"]
       }
     },
     {
@@ -254,7 +254,7 @@
           { "itemId": "oil", "name": "Oil", "quantity": 6000 }
         ],
         "factions": [],
-        "prerequisites": ["repair_2"]
+        "prerequisites": ["gunsmith_2", "repair_2"]
       }
     },
     {
@@ -290,7 +290,7 @@
           { "itemId": "oil", "name": "Oil", "quantity": 2100 }
         ],
         "factions": [],
-        "prerequisites": ["generator_2"]
+        "prerequisites": ["lightning_1", "generator_2"]
       }
     },
     {
@@ -329,7 +329,7 @@
         "factions": [
           { "factionId": "igc", "name": "IGC", "level": 3 }
         ],
-        "prerequisites": ["stash_2", "lightning_2"]
+        "prerequisites": ["repair_1", "stash_2", "lightning_2"]
       }
     },
     {

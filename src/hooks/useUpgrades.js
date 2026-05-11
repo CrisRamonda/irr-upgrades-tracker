@@ -6,53 +6,70 @@ export function useUpgrades(inventory) {
   const categories = upgradesData.categories;
 
   const getAllUpgradesStatus = useMemo(() => {
-    const statusMap = {};
+    if (!inventory) return {};
 
-    upgrades.forEach(upgrade => {
-      statusMap[upgrade.id] = null;
-    });
+    const statusMap = {};
+    const calculating = new Set();
 
     const calculateStatus = (upgradeId) => {
-      const upgrade = upgrades.find(u => u.id === upgradeId);
-      if (!upgrade) return 'locked';
+      if (calculating.has(upgradeId)) return 'locked';
+      if (statusMap[upgradeId] !== undefined) return statusMap[upgradeId];
 
-      const prereqs = upgrade.requirements.prerequisites || [];
-      const factions = upgrade.requirements.factions || [];
-      const items = upgrade.requirements.items || [];
+      calculating.add(upgradeId);
+
+      const upgrade = upgrades.find(u => u.id === upgradeId);
+      if (!upgrade) {
+        calculating.delete(upgradeId);
+        return 'locked';
+      }
+
+      const prereqs = upgrade.requirements?.prerequisites || [];
+      const factions = upgrade.requirements?.factions || [];
+      const items = upgrade.requirements?.items || [];
 
       const prereqsMet = prereqs.every(prereqId => calculateStatus(prereqId) === 'ready');
 
       const factionsMet = factions.every(f => {
-        if (f.factionId === 'player') {
-          return inventory.factionLevels?.[f.factionId] >= f.level;
-        }
-        return true;
+        const currentLevel = inventory.factionLevels?.[f.factionId] ?? 0;
+        return currentLevel >= f.level;
       });
 
-      const itemsMet = items.every(item => inventory.items?.[upgrade.id]?.[item.itemId]);
+      const itemsMet = items.every(item =>
+        inventory.items?.[upgradeId]?.[item.itemId] === true
+      );
 
-      if (!prereqsMet) return 'locked';
-      if (!factionsMet) return 'locked';
-      if (itemsMet) return 'ready';
-      return 'available';
+      const result = !prereqsMet || !factionsMet ? 'locked' :
+                     itemsMet ? 'ready' : 'available';
+
+      statusMap[upgradeId] = result;
+      calculating.delete(upgradeId);
+
+      return result;
     };
 
     upgrades.forEach(upgrade => {
-      statusMap[upgrade.id] = calculateStatus(upgrade.id);
+      if (statusMap[upgrade.id] === undefined) {
+        calculateStatus(upgrade.id);
+      }
     });
 
     return statusMap;
-  }, [inventory.items, inventory.factionLevels]);
+  }, [inventory?.items, inventory?.factionLevels]);
 
   const getUpgradeStatus = (upgrade) => {
+    if (!upgrade || !inventory) return 'locked';
     return getAllUpgradesStatus[upgrade.id] || 'locked';
   };
 
   const getUpgradeProgress = (upgrade) => {
-    const items = upgrade.requirements.items || [];
+    if (!upgrade || !inventory) return { current: 0, total: 0, percentage: 0 };
+
+    const items = upgrade.requirements?.items || [];
     if (items.length === 0) return { current: 0, total: 0, percentage: 0 };
 
-    const current = items.filter(item => inventory.items?.[upgrade.id]?.[item.itemId]).length;
+    const current = items.filter(item =>
+      inventory.items?.[upgrade.id]?.[item.itemId] === true
+    ).length;
     const total = items.length;
     const percentage = Math.round((current / total) * 100);
 
@@ -60,7 +77,9 @@ export function useUpgrades(inventory) {
   };
 
   const getPrerequisitesInfo = (upgrade) => {
-    return (upgrade.requirements.prerequisites || []).map(prereqId => {
+    if (!upgrade) return [];
+
+    return (upgrade.requirements?.prerequisites || []).map(prereqId => {
       const prereq = upgrades.find(u => u.id === prereqId);
       const status = getAllUpgradesStatus[prereqId];
       return {
@@ -72,20 +91,22 @@ export function useUpgrades(inventory) {
   };
 
   const getFactionsInfo = (upgrade) => {
-    return (upgrade.requirements.factions || []).map(f => ({
+    if (!upgrade) return [];
+
+    return (upgrade.requirements?.factions || []).map(f => ({
       name: f.name,
       level: f.level,
-      currentLevel: inventory.factionLevels?.[f.factionId] || 0,
-      isMet: f.factionId === 'player' 
-        ? (inventory.factionLevels?.player || 0) >= f.level
-        : true
+      currentLevel: inventory?.factionLevels?.[f.factionId] ?? 0,
+      isMet: (inventory?.factionLevels?.[f.factionId] ?? 0) >= f.level
     }));
   };
 
   const getItemsInfo = (upgrade) => {
-    return (upgrade.requirements.items || []).map(item => ({
+    if (!upgrade) return [];
+
+    return (upgrade.requirements?.items || []).map(item => ({
       ...item,
-      hasItem: !!inventory.items?.[upgrade.id]?.[item.itemId]
+      hasItem: inventory?.items?.[upgrade.id]?.[item.itemId] === true
     }));
   };
 

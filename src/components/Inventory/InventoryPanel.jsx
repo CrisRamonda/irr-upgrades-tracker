@@ -1,7 +1,22 @@
-import { Package, Check } from 'lucide-react';
+import { Package, Check, Shield, User } from 'lucide-react';
 import { ProgressBar } from '../UI/ProgressBar';
 
-export function InventoryPanel({ items, stats, onToggleItem, isItemChecked, itemRequiredUpgrades }) {
+export function InventoryPanel({ 
+  items, 
+  stats, 
+  onToggleItem, 
+  isItemChecked, 
+  itemRequiredUpgrades,
+  factionLevels,
+  onFactionLevelChange
+}) {
+  const factions = [
+    { id: 'igc', name: 'IGC' },
+    { id: 'vlf', name: 'VLF' },
+    { id: 'uics', name: 'UICS' },
+    { id: 'player', name: 'Player' }
+  ];
+
   return (
     <div className="p-4 space-y-4">
       <div className="card-tactical p-4">
@@ -19,6 +34,32 @@ export function InventoryPanel({ items, stats, onToggleItem, isItemChecked, item
         </p>
         <p className="text-xs text-tactical-muted mt-1">
           Total items needed: {stats.total}
+        </p>
+      </div>
+
+      <div className="card-tactical p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Shield className="w-5 h-5 text-status-accent" />
+          <h3 className="text-tactical-text font-bold">Faction & Player Levels</h3>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {factions.map(faction => (
+            <div key={faction.id} className="flex items-center gap-2">
+              <label className="text-sm text-tactical-muted w-16">
+                {faction.name}:
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={factionLevels?.[faction.id] || 0}
+                onChange={(e) => onFactionLevelChange(faction.id, e.target.value)}
+                className="input-dark w-20 text-center"
+              />
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-tactical-muted mt-3">
+          Set your faction and player levels to unlock upgrades that require them.
         </p>
       </div>
 

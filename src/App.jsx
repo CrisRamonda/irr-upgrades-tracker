@@ -17,14 +17,37 @@ function App() {
     items: {},
     globalItems: {},
     completedUpgrades: {},
-    factionLevels: {}
+    factionLevels: { igc: 1, vlf: 1, uics: 1, player: 1 }
   });
+
+  useEffect(() => {
+    setInventory(prev => {
+      if (prev.factionLevels?.igc === undefined || prev.factionLevels?.igc === 0) {
+        return {
+          ...prev,
+          factionLevels: { igc: 1, vlf: 1, uics: 1, player: 1 }
+        };
+      }
+      return prev;
+    });
+  }, []);
 
   const { toasts, showToast, dismissToast } = useToast();
 
   const upgradesHook = useUpgrades(inventory);
 
   const [previouslyReady, setPreviouslyReady] = useState({});
+
+  const handleFactionLevelChange = useCallback((factionId, level) => {
+    const numLevel = Math.max(0, parseInt(level) || 0);
+    setInventory(prev => ({
+      ...prev,
+      factionLevels: {
+        ...prev.factionLevels,
+        [factionId]: numLevel
+      }
+    }));
+  }, [setInventory]);
 
   const getUpgradesForItem = useCallback((itemId) => {
     return upgradesData.upgrades
@@ -106,18 +129,22 @@ function App() {
   }, [inventory, upgradesHook, showToast, previouslyReady]);
 
   const handleImport = (data) => {
-    if (data.items) {
-      const importedItems = data.items;
+    const importedItems = data.items || {};
+    const importedGlobalItems = data.globalItems || {};
+    const importedFactionLevels = data.factionLevels || {
+      igc: 1, vlf: 1, uics: 1, player: 1
+    };
 
-      const newGlobalItems = {};
-      const allItemIds = new Set();
-      upgradesData.upgrades.forEach(upg => {
-        upg.requirements.items.forEach(item => {
-          allItemIds.add(item.itemId);
-        });
+    const newGlobalItems = { ...importedGlobalItems };
+    const allItemIds = new Set();
+    upgradesData.upgrades.forEach(upg => {
+      upg.requirements.items.forEach(item => {
+        allItemIds.add(item.itemId);
       });
+    });
 
-      allItemIds.forEach(itemId => {
+    allItemIds.forEach(itemId => {
+      if (newGlobalItems[itemId] === undefined) {
         const upgradesWithItem = upgradesData.upgrades
           .filter(upg => upg.requirements.items.some(i => i.itemId === itemId))
           .map(upg => upg.id);
@@ -129,16 +156,15 @@ function App() {
         if (allMarked) {
           newGlobalItems[itemId] = true;
         }
-      });
+      }
+    });
 
-      setInventory(prev => ({
-        ...prev,
-        items: importedItems,
-        globalItems: newGlobalItems,
-        completedUpgrades: data.completedUpgrades || prev.completedUpgrades,
-        factionLevels: data.factionLevels || prev.factionLevels
-      }));
-    }
+    setInventory(prev => ({
+      items: importedItems,
+      globalItems: newGlobalItems,
+      completedUpgrades: data.completedUpgrades || prev.completedUpgrades,
+      factionLevels: importedFactionLevels
+    }));
   };
 
   const handleReset = () => {
@@ -146,7 +172,7 @@ function App() {
       items: {},
       globalItems: {},
       completedUpgrades: {},
-      factionLevels: {}
+      factionLevels: { igc: 1, vlf: 1, uics: 1, player: 1 }
     });
     setPreviouslyReady({});
   };
@@ -203,6 +229,8 @@ function App() {
             onToggleItem={handleToggleGlobalItem}
             isItemChecked={isGlobalItemChecked}
             itemRequiredUpgrades={itemRequiredUpgrades}
+            factionLevels={inventory.factionLevels}
+            onFactionLevelChange={handleFactionLevelChange}
           />
         );
       case 'settings':
