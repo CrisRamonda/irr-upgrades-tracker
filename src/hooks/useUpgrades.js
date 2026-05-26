@@ -27,7 +27,7 @@ export function useUpgrades(inventory) {
       const factions = upgrade.requirements?.factions || [];
       const items = upgrade.requirements?.items || [];
 
-      const prereqsMet = prereqs.every(prereqId => calculateStatus(prereqId) === 'ready');
+      const prereqsMet = prereqs.every(prereqId => inventory.builtUpgrades?.[prereqId]);
 
       const factionsMet = factions.every(f => {
         const currentLevel = inventory.factionLevels?.[f.factionId] ?? 0;
@@ -54,7 +54,7 @@ export function useUpgrades(inventory) {
     });
 
     return statusMap;
-  }, [inventory?.items, inventory?.factionLevels]);
+  }, [inventory?.items, inventory?.factionLevels, inventory?.builtUpgrades]);
 
   const getUpgradeStatus = (upgrade) => {
     if (!upgrade || !inventory) return 'locked';
@@ -81,11 +81,10 @@ export function useUpgrades(inventory) {
 
     return (upgrade.requirements?.prerequisites || []).map(prereqId => {
       const prereq = upgrades.find(u => u.id === prereqId);
-      const status = getAllUpgradesStatus[prereqId];
       return {
         id: prereqId,
         name: prereq ? prereq.name : prereqId,
-        isCompleted: status === 'ready'
+        isCompleted: !!inventory?.builtUpgrades?.[prereqId]
       };
     });
   };
