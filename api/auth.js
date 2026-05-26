@@ -1,7 +1,9 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { scryptSync, randomBytes, timingSafeEqual, randomUUID } from 'crypto';
 
-export const config = { runtime: 'nodejs18.x' };
+const redis = Redis.fromEnv();
+
+export const config = { runtime: 'nodejs' };
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -23,7 +25,7 @@ export default async function handler(req, res) {
   }
 
   if (action === 'register') {
-    const existing = await kv.get(`user:${username}`);
+    const existing = await redis.get(`user:${username}`);
     if (existing) {
       return res.status(409).json({ error: 'User already exists' });
     }
@@ -32,13 +34,13 @@ export default async function handler(req, res) {
     const hash = scryptSync(password, salt, 64).toString('hex');
     const passwordHash = `${salt}:${hash}`;
 
-    await kv.set(`user:${username}`, passwordHash);
+    await redis.set(`user:${username}`, passwordHash);
 
     return res.status(201).json({ success: true });
   }
 
   if (action === 'login') {
-    const storedHash = await kv.get(`user:${username}`);
+    const storedHash = await redis.get(`user:${username}`);
     if (!storedHash) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -51,7 +53,7 @@ export default async function handler(req, res) {
     }
 
     const token = randomUUID();
-    await kv.set(`session:${token}`, JSON.stringify({ username, createdAt: Date.now() }));
+    await redis.set(`session:${token}`, JSON.stringify({ username, createdAt: Date.now() }));
 
     return res.json({ token, username });
   }

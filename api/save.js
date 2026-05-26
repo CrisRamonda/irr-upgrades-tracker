@@ -1,15 +1,17 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
-export const config = { runtime: 'nodejs18.x' };
+const redis = Redis.fromEnv();
 
-export default async function handler(req, res) => {
+export const config = { runtime: 'nodejs' };
+
+export default async function handler(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Missing or invalid authorization header' });
   }
 
   const token = authHeader.slice(7);
-  const sessionData = await kv.get(`session:${token}`);
+  const sessionData = await redis.get(`session:${token}`);
 
   if (!sessionData) {
     return res.status(401).json({ error: 'Invalid or expired session' });
@@ -25,7 +27,7 @@ export default async function handler(req, res) => {
   const { username } = session;
 
   if (req.method === 'GET') {
-    const raw = await kv.get(`save:${username}`);
+    const raw = await redis.get(`save:${username}`);
 
     if (!raw) {
       return res.json({
@@ -49,7 +51,7 @@ export default async function handler(req, res) => {
   if (req.method === 'PUT') {
     const { items, globalItems, factionLevels, builtUpgrades } = req.body;
 
-    await kv.set(`save:${username}`, JSON.stringify({
+    await redis.set(`save:${username}`, JSON.stringify({
       items: items || {},
       globalItems: globalItems || {},
       factionLevels: factionLevels || { igc: 1, vlf: 1, uics: 1, player: 1 },

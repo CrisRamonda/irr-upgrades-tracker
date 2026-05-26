@@ -28,22 +28,29 @@ export function useCloudSave() {
 
   const apiRequest = useCallback(async (path, options = {}) => {
     const url = `${API_BASE}${path}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || `Request failed with status ${response.status}`);
+      if (!response.ok) {
+        throw new Error(data.error || `Request failed with status ${response.status}`);
+      }
+
+      return data;
+    } finally {
+      clearTimeout(timeoutId);
     }
-
-    return data;
   }, []);
 
   const login = useCallback(async (username, password) => {
