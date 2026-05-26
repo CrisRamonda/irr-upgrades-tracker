@@ -1,23 +1,20 @@
-import { Redis } from '@upstash/redis';
 import { scryptSync, randomBytes, timingSafeEqual, randomUUID } from 'crypto';
+import getRedis from './redis.js';
 
 export const config = { runtime: 'nodejs' };
-
-function getRedis() {
-  try {
-    return Redis.fromEnv();
-  } catch {
-    return null;
-  }
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const redis = getRedis();
-  if (!redis) {
+  let redis;
+  try {
+    redis = getRedis();
+    if (!redis) {
+      return res.status(500).json({ error: 'Redis connection not configured' });
+    }
+  } catch {
     return res.status(500).json({ error: 'Redis connection not configured' });
   }
 
@@ -44,9 +41,7 @@ export default async function handler(req, res) {
 
       const salt = randomBytes(16).toString('hex');
       const hash = scryptSync(password, salt, 64).toString('hex');
-      const passwordHash = `${salt}:${hash}`;
-
-      await redis.set(`user:${username}`, passwordHash);
+      await redis.set(`user:${username}`, `${salt}:${hash}`);
 
       return res.status(201).json({ success: true });
     }

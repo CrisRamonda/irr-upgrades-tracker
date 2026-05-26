@@ -1,18 +1,15 @@
-import { Redis } from '@upstash/redis';
+import getRedis from './redis.js';
 
 export const config = { runtime: 'nodejs' };
 
-function getRedis() {
-  try {
-    return Redis.fromEnv();
-  } catch {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
-  const redis = getRedis();
-  if (!redis) {
+  let redis;
+  try {
+    redis = getRedis();
+    if (!redis) {
+      return res.status(500).json({ error: 'Redis connection not configured' });
+    }
+  } catch {
     return res.status(500).json({ error: 'Redis connection not configured' });
   }
 
@@ -31,7 +28,7 @@ export default async function handler(req, res) {
 
     let session;
     try {
-      session = typeof sessionData === 'string' ? JSON.parse(sessionData) : sessionData;
+      session = JSON.parse(sessionData);
     } catch {
       return res.status(500).json({ error: 'Session data corrupted' });
     }
@@ -52,7 +49,7 @@ export default async function handler(req, res) {
 
       let saveData;
       try {
-        saveData = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        saveData = JSON.parse(raw);
       } catch {
         return res.status(500).json({ error: 'Save data corrupted' });
       }
