@@ -4,6 +4,7 @@ export function Badge({ children, variant = 'default', className = '' }) {
     ready: 'bg-status-ready/20 text-status-ready border-status-ready/50',
     available: 'bg-status-available/20 text-status-available border-status-available/50',
     locked: 'bg-status-locked/20 text-status-locked border-status-locked/50',
+    built: 'bg-status-accent/20 text-status-accent border-status-accent/50',
     faction: 'bg-status-accent/20 text-status-accent border-status-accent/50',
   };
 

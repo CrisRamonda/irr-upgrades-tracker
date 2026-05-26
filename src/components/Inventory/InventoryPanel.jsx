@@ -1,5 +1,7 @@
-import { Package, Check, Shield, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Package, Check, Shield, User, Info } from 'lucide-react';
 import { ProgressBar } from '../UI/ProgressBar';
+import { ItemUpgradesOverlay } from './ItemUpgradesOverlay';
 
 export function InventoryPanel({ 
   items, 
@@ -8,8 +10,22 @@ export function InventoryPanel({
   isItemChecked, 
   itemRequiredUpgrades,
   factionLevels,
-  onFactionLevelChange
+  onFactionLevelChange,
+  getItemUpgradeDetails,
+  isBuiltUpgrade
 }) {
+  const [overlayItem, setOverlayItem] = useState(null);
+  const [localFactionLevels, setLocalFactionLevels] = useState({});
+
+  useEffect(() => {
+    setLocalFactionLevels({
+      igc: String(factionLevels?.igc ?? 1),
+      vlf: String(factionLevels?.vlf ?? 1),
+      uics: String(factionLevels?.uics ?? 1),
+      player: String(factionLevels?.player ?? 1),
+    });
+  }, [factionLevels]);
+
   const factions = [
     { id: 'igc', name: 'IGC' },
     { id: 'vlf', name: 'VLF' },
@@ -51,8 +67,17 @@ export function InventoryPanel({
               <input
                 type="number"
                 min="0"
-                value={factionLevels?.[faction.id] || 0}
-                onChange={(e) => onFactionLevelChange(faction.id, e.target.value)}
+                value={localFactionLevels[faction.id] ?? '1'}
+                onChange={(e) => setLocalFactionLevels(prev => ({ ...prev, [faction.id]: e.target.value }))}
+                onBlur={() => {
+                  const val = localFactionLevels[faction.id];
+                  if (val === '' || val === undefined || val === null || isNaN(Number(val)) || Number(val) < 1) {
+                    onFactionLevelChange(faction.id, '1');
+                    setLocalFactionLevels(prev => ({ ...prev, [faction.id]: '1' }));
+                  } else {
+                    onFactionLevelChange(faction.id, val);
+                  }
+                }}
                 className="input-dark w-20 text-center"
               />
             </div>
@@ -67,34 +92,47 @@ export function InventoryPanel({
         {items.map(item => {
           const isChecked = isItemChecked ? isItemChecked(item.id) : false;
           const upgradeCount = itemRequiredUpgrades ? itemRequiredUpgrades[item.id]?.length || 0 : 0;
+          const marked = item.markedQuantity || 0;
 
           return (
-            <label
+            <div
               key={item.id}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer
-                         transition-all border
+              className={`flex items-start gap-2 p-3 rounded-lg transition-all border
                          ${isChecked
                            ? 'bg-status-ready/10 border-status-ready/30'
                            : 'bg-tactical-card border-tactical-border hover:bg-tactical-elevated'}`}
             >
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={() => onToggleItem(item.id)}
-                className="checkbox-custom"
-              />
-              <div className="flex-1 min-w-0">
-                <span className={`text-sm truncate block ${isChecked ? 'text-status-ready' : 'text-tactical-text'}`}>
-                  {item.name}
-                </span>
-                <span className="text-xs text-tactical-muted">
-                  x{item.totalRequired} total • {upgradeCount} upgrade{upgradeCount !== 1 ? 's' : ''}
-                </span>
-              </div>
-              {isChecked && (
-                <Check className="w-4 h-4 text-status-ready flex-shrink-0" />
-              )}
-            </label>
+              <label className="flex items-start gap-2 flex-1 min-w-0 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => onToggleItem(item.id)}
+                  className="checkbox-custom mt-0.5"
+                />
+                <div className="flex-1 min-w-0">
+                  <span className={`text-sm truncate block ${isChecked ? 'text-status-ready' : 'text-tactical-text'}`}>
+                    {item.name}
+                  </span>
+                  <span className="text-xs text-tactical-muted">
+                    {upgradeCount} upgrade{upgradeCount !== 1 ? 's' : ''} • Submitted: {marked.toLocaleString()}/{item.totalRequired.toLocaleString()}
+                    <span className="hidden sm:inline"> • Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{(item.totalRequired - marked).toLocaleString()}</span></span>
+                  </span>
+                  <span className="text-xs text-tactical-muted block sm:hidden mt-0.5">
+                    Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{(item.totalRequired - marked).toLocaleString()}</span>
+                  </span>
+                </div>
+                {isChecked && (
+                  <Check className="w-4 h-4 text-status-ready flex-shrink-0 mt-0.5" />
+                )}
+              </label>
+              <button
+                onClick={() => setOverlayItem(item)}
+                className="p-2 rounded hover:bg-tactical-elevated transition-colors text-tactical-muted hover:text-status-accent flex-shrink-0"
+                title="Show upgrade details"
+              >
+                <Info className="w-5 h-5" />
+              </button>
+            </div>
           );
         })}
       </div>
@@ -103,6 +141,14 @@ export function InventoryPanel({
         <div className="text-center py-8 text-tactical-muted">
           No items to track. Import upgrade data first.
         </div>
+      )}
+
+      {overlayItem && (
+        <ItemUpgradesOverlay
+          item={overlayItem}
+          upgrades={getItemUpgradeDetails ? getItemUpgradeDetails(overlayItem.id) : []}
+          onClose={() => setOverlayItem(null)}
+        />
       )}
     </div>
   );

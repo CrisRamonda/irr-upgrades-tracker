@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, Filter, Eye, EyeOff } from 'lucide-react';
+import { Search, Filter, CheckCircle } from 'lucide-react';
 import { UpgradeCard } from './UpgradeCard';
 
 export function UpgradeList({
@@ -10,12 +10,15 @@ export function UpgradeList({
   getPrerequisitesInfo,
   getFactionsInfo,
   getItemsInfo,
-  onToggleItem
+  onToggleItem,
+  onToggleBuilt,
+  isBuiltUpgrade
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showReady, setShowReady] = useState(true);
   const [showLocked, setShowLocked] = useState(true);
+  const [showBuilt, setShowBuilt] = useState(true);
 
   const filteredUpgrades = useMemo(() => {
     let result = upgrades;
@@ -31,13 +34,16 @@ export function UpgradeList({
 
     result = result.filter(upgrade => {
       const status = getUpgradeStatus(upgrade);
-      if (status === 'ready' && !showReady) return false;
+      const built = isBuiltUpgrade ? isBuiltUpgrade(upgrade.id) : false;
+
+      if (built && !showBuilt) return false;
+      if (status === 'ready' && !built && !showReady) return false;
       if (status === 'locked' && !showLocked) return false;
       return true;
     });
 
     return result;
-  }, [upgrades, selectedCategory, searchQuery, showReady, showLocked, getUpgradeStatus]);
+  }, [upgrades, selectedCategory, searchQuery, showReady, showLocked, showBuilt, getUpgradeStatus, isBuiltUpgrade]);
 
   const getCategoryName = (catId) => {
     const cat = categories.find(c => c.id === catId);
@@ -74,7 +80,7 @@ export function UpgradeList({
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-sm">
+      <div className="flex flex-wrap items-center gap-4 text-sm">
         <span className="text-tactical-muted">Filter by status:</span>
         <label className="flex items-center gap-2 cursor-pointer">
           <input
@@ -94,6 +100,15 @@ export function UpgradeList({
           />
           <span className="text-status-locked">Show Locked</span>
         </label>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showBuilt}
+            onChange={(e) => setShowBuilt(e.target.checked)}
+            className="checkbox-custom"
+          />
+          <span className="text-status-accent">Show Built</span>
+        </label>
       </div>
 
       {selectedCategory !== 'all' && (
@@ -109,6 +124,7 @@ export function UpgradeList({
           const prerequisites = getPrerequisitesInfo(upgrade);
           const factions = getFactionsInfo(upgrade);
           const items = getItemsInfo(upgrade);
+          const built = isBuiltUpgrade ? isBuiltUpgrade(upgrade.id) : false;
 
           return (
             <UpgradeCard
@@ -119,7 +135,9 @@ export function UpgradeList({
               prerequisites={prerequisites}
               factions={factions}
               items={items}
+              built={built}
               onToggleItem={onToggleItem}
+              onToggleBuilt={onToggleBuilt}
             />
           );
         })}

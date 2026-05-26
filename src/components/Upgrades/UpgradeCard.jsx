@@ -1,4 +1,4 @@
-import { Check, X, Lock, ChevronRight } from 'lucide-react';
+import { Check, X, Lock, ChevronRight, Hammer, Undo2 } from 'lucide-react';
 import { Badge } from '../UI/Badge';
 import { ProgressBar } from '../UI/ProgressBar';
 
@@ -9,7 +9,9 @@ export function UpgradeCard({
   prerequisites,
   factions,
   items,
-  onToggleItem
+  built,
+  onToggleItem,
+  onToggleBuilt
 }) {
   const statusColors = {
     locked: {
@@ -26,10 +28,18 @@ export function UpgradeCard({
       border: 'border-status-ready/50',
       bg: 'bg-status-ready/5',
       badge: 'ready'
+    },
+    built: {
+      border: 'border-status-accent/50',
+      bg: 'bg-status-accent/5',
+      badge: 'built'
     }
   };
 
-  const style = statusColors[status];
+  const currentStatus = built ? 'built' : status;
+  const style = statusColors[currentStatus];
+  const isItemsDisabled = currentStatus === 'locked' || currentStatus === 'built';
+  const showBuildButton = currentStatus === 'ready' || currentStatus === 'built';
 
   return (
     <div className={`card-tactical p-4 ${style.border} ${style.bg}`}>
@@ -37,11 +47,33 @@ export function UpgradeCard({
         <div className="flex-1">
           <h3 className="text-tactical-text font-bold">{upgrade.name}</h3>
           <Badge variant={style.badge} className="mt-1">
-            {status === 'locked' && <Lock className="w-3 h-3 mr-1" />}
-            {status === 'ready' && <Check className="w-3 h-3 mr-1" />}
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {currentStatus === 'locked' && <Lock className="w-3 h-3 mr-1" />}
+            {currentStatus === 'ready' && <Check className="w-3 h-3 mr-1" />}
+            {currentStatus === 'built' && <Hammer className="w-3 h-3 mr-1" />}
+            {currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}
           </Badge>
         </div>
+        {showBuildButton && (
+          <button
+            onClick={() => onToggleBuilt(upgrade.id)}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-all
+                       ${currentStatus === 'ready' 
+                         ? 'bg-status-ready/20 text-status-ready hover:bg-status-ready/30' 
+                         : 'bg-status-accent/20 text-status-accent hover:bg-status-accent/30'}`}
+          >
+            {currentStatus === 'ready' ? (
+              <>
+                <Hammer className="w-3 h-3" />
+                Build
+              </>
+            ) : (
+              <>
+                <Undo2 className="w-3 h-3" />
+                Unbuild
+              </>
+            )}
+          </button>
+        )}
       </div>
 
       {progress.total > 0 && (
@@ -85,15 +117,15 @@ export function UpgradeCard({
         {items.map(item => (
           <label
             key={item.itemId}
-            className="flex items-center gap-2 py-1 px-2 rounded hover:bg-tactical-elevated 
-                       cursor-pointer transition-colors"
+            className={`flex items-center gap-2 py-1 px-2 rounded transition-colors
+                       ${isItemsDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:bg-tactical-elevated'}`}
           >
             <input
               type="checkbox"
               checked={item.hasItem}
               onChange={() => onToggleItem(upgrade.id, item.itemId)}
               className="checkbox-custom"
-              disabled={status === 'locked'}
+              disabled={isItemsDisabled}
             />
             <span className={`text-sm ${item.hasItem ? 'text-status-ready' : 'text-tactical-text'}`}>
               {item.name}
