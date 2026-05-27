@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Search, Filter, CheckCircle } from 'lucide-react';
 import { UpgradeCard } from './UpgradeCard';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export function UpgradeList({
   upgrades,
@@ -14,11 +15,11 @@ export function UpgradeList({
   onToggleBuilt,
   isBuiltUpgrade
 }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [showReady, setShowReady] = useState(true);
-  const [showLocked, setShowLocked] = useState(true);
-  const [showBuilt, setShowBuilt] = useState(true);
+  const [searchQuery, setSearchQuery] = useLocalStorage('irr-filters-search', '');
+  const [selectedCategory, setSelectedCategory] = useLocalStorage('irr-filters-category', 'all');
+  const [showReady, setShowReady] = useLocalStorage('irr-filters-show-ready', true);
+  const [showLocked, setShowLocked] = useLocalStorage('irr-filters-show-locked', true);
+  const [showBuilt, setShowBuilt] = useLocalStorage('irr-filters-show-built', true);
 
   const filteredUpgrades = useMemo(() => {
     let result = upgrades;
