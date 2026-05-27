@@ -1,6 +1,7 @@
 import { Check, X, Lock, ChevronRight, Hammer, Undo2 } from 'lucide-react';
 import { Badge } from '../UI/Badge';
 import { ProgressBar } from '../UI/ProgressBar';
+import { formatNumber } from '../../utils/format';
 
 export function UpgradeCard({
   upgrade,
@@ -131,7 +132,7 @@ export function UpgradeCard({
               {item.name}
             </span>
             <span className="text-xs text-tactical-muted ml-auto font-mono">
-              x{item.quantity}
+              x{formatNumber(item.quantity)}
             </span>
           </label>
         ))}

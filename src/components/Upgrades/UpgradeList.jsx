@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Search, Filter, CheckCircle } from 'lucide-react';
+import { Search, Filter, CheckCircle, Lock, Wrench } from 'lucide-react';
 import { UpgradeCard } from './UpgradeCard';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
@@ -52,7 +52,7 @@ export function UpgradeList({
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 max-w-5xl mx-auto">
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tactical-muted" />
@@ -81,35 +81,37 @@ export function UpgradeList({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-sm">
-        <span className="text-tactical-muted">Filter by status:</span>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showReady}
-            onChange={(e) => setShowReady(e.target.checked)}
-            className="checkbox-custom"
-          />
-          <span className="text-status-ready">Show Ready</span>
-        </label>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showLocked}
-            onChange={(e) => setShowLocked(e.target.checked)}
-            className="checkbox-custom"
-          />
-          <span className="text-status-locked">Show Locked</span>
-        </label>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showBuilt}
-            onChange={(e) => setShowBuilt(e.target.checked)}
-            className="checkbox-custom"
-          />
-          <span className="text-status-accent">Show Built</span>
-        </label>
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={() => setShowBuilt(!showBuilt)}
+          className={`flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg border text-xs font-medium transition-all
+                     ${showBuilt
+                       ? 'bg-status-accent/15 border-status-accent text-status-accent'
+                       : 'bg-tactical-elevated border-tactical-border text-tactical-muted'}`}
+        >
+          <Wrench className="w-4 h-4" />
+          Built
+        </button>
+        <button
+          onClick={() => setShowReady(!showReady)}
+          className={`flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg border text-xs font-medium transition-all
+                     ${showReady
+                       ? 'bg-status-ready/15 border-status-ready text-status-ready'
+                       : 'bg-tactical-elevated border-tactical-border text-tactical-muted'}`}
+        >
+          <CheckCircle className="w-4 h-4" />
+          Ready
+        </button>
+        <button
+          onClick={() => setShowLocked(!showLocked)}
+          className={`flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg border text-xs font-medium transition-all
+                     ${showLocked
+                       ? 'bg-status-locked/15 border-status-locked text-status-locked'
+                       : 'bg-tactical-elevated border-tactical-border text-tactical-muted'}`}
+        >
+          <Lock className="w-4 h-4" />
+          Locked
+        </button>
       </div>
 
       {selectedCategory !== 'all' && (
@@ -118,7 +120,7 @@ export function UpgradeList({
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-5xl mx-auto">
         {filteredUpgrades.map(upgrade => {
           const status = getUpgradeStatus(upgrade);
           const progress = getUpgradeProgress(upgrade);

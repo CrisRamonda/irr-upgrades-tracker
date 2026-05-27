@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Package, Check, Shield, User, Info } from 'lucide-react';
+import { Package, Check, Shield, Info } from 'lucide-react';
 import { ProgressBar } from '../UI/ProgressBar';
 import { ItemUpgradesOverlay } from './ItemUpgradesOverlay';
+import { formatNumber } from '../../utils/format';
 
 export function InventoryPanel({ 
   items, 
-  stats, 
+  stats,
   onToggleItem, 
   isItemChecked, 
   itemRequiredUpgrades,
@@ -33,24 +34,53 @@ export function InventoryPanel({
     { id: 'player', name: 'Player' }
   ];
 
+  const materialNames = ['concrete', 'food', 'metal', 'oil'];
+
+  const materialItems = items.filter(i => materialNames.includes(i.name.toLowerCase()));
+  const otherItems = items.filter(i => !materialNames.includes(i.name.toLowerCase()));
+
+  const makeStats = (list) => {
+    const markedQuantity = list.reduce((s, i) => s + (i.markedQuantity || 0), 0);
+    const totalRequired = list.reduce((s, i) => s + i.totalRequired, 0);
+    return {
+      totalRequired,
+      markedQuantity,
+      percentage: totalRequired > 0 ? Math.round((markedQuantity / totalRequired) * 100) : 0,
+    };
+  };
+
+  const itemsStats = makeStats(otherItems);
+  const materialsStats = makeStats(materialItems);
+
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 max-w-5xl mx-auto">
       <div className="card-tactical p-4">
         <div className="flex items-center gap-3 mb-3">
           <Package className="w-5 h-5 text-status-accent" />
           <h2 className="text-tactical-text font-bold">Inventory</h2>
         </div>
-        <ProgressBar
-          current={stats.collected}
-          total={items.length}
-          percentage={stats.percentage}
-        />
-        <p className="text-xs text-tactical-muted mt-2">
-          {stats.collected} of {items.length} unique items collected
-        </p>
-        <p className="text-xs text-tactical-muted mt-1">
-          Total items needed: {stats.total}
-        </p>
+        <div className="space-y-2">
+          <div>
+            <div className="text-xs text-tactical-muted mb-1">
+              Items
+            </div>
+            <ProgressBar
+              current={itemsStats.markedQuantity}
+              total={itemsStats.totalRequired}
+              percentage={itemsStats.percentage}
+            />
+          </div>
+          <div>
+            <div className="text-xs text-tactical-muted mb-1">
+              Materials
+            </div>
+            <ProgressBar
+              current={materialsStats.markedQuantity}
+              total={materialsStats.totalRequired}
+              percentage={materialsStats.percentage}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="card-tactical p-4">
@@ -88,54 +118,62 @@ export function InventoryPanel({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {items.map(item => {
-          const isChecked = isItemChecked ? isItemChecked(item.id) : false;
-          const upgradeCount = itemRequiredUpgrades ? itemRequiredUpgrades[item.id]?.length || 0 : 0;
-          const marked = item.markedQuantity || 0;
+      {[
+        { title: 'Items', items: otherItems },
+        { title: 'Materials', items: materialItems },
+      ].map(section => (
+          <div key={section.title}>
+            <h3 className="text-tactical-text font-bold text-sm mb-2 mt-2">
+              {section.title}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {section.items.map(item => {
+                const isChecked = isItemChecked ? isItemChecked(item.id) : false;
+                const upgradeCount = itemRequiredUpgrades ? itemRequiredUpgrades[item.id]?.length || 0 : 0;
+                const marked = item.markedQuantity || 0;
 
-          return (
-            <div
-              key={item.id}
-              className={`flex items-start gap-2 p-3 rounded-lg transition-all border
-                         ${isChecked
-                           ? 'bg-status-ready/10 border-status-ready/30'
-                           : 'bg-tactical-card border-tactical-border hover:bg-tactical-elevated'}`}
-            >
-              <label className="flex items-start gap-2 flex-1 min-w-0 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => onToggleItem(item.id)}
-                  className="checkbox-custom mt-0.5"
-                />
-                <div className="flex-1 min-w-0">
-                  <span className={`text-sm truncate block ${isChecked ? 'text-status-ready' : 'text-tactical-text'}`}>
-                    {item.name}
-                  </span>
-                  <span className="text-xs text-tactical-muted">
-                    {upgradeCount} upgrade{upgradeCount !== 1 ? 's' : ''} • Submitted: {marked.toLocaleString()}/{item.totalRequired.toLocaleString()}
-                    <span className="hidden sm:inline"> • Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{(item.totalRequired - marked).toLocaleString()}</span></span>
-                  </span>
-                  <span className="text-xs text-tactical-muted block sm:hidden mt-0.5">
-                    Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{(item.totalRequired - marked).toLocaleString()}</span>
-                  </span>
-                </div>
-                {isChecked && (
-                  <Check className="w-4 h-4 text-status-ready flex-shrink-0 mt-0.5" />
-                )}
-              </label>
-              <button
-                onClick={() => setOverlayItem(item)}
-                className="p-2 rounded hover:bg-tactical-elevated transition-colors text-tactical-muted hover:text-status-accent flex-shrink-0"
-                title="Show upgrade details"
-              >
-                <Info className="w-5 h-5" />
-              </button>
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => onToggleItem(item.id)}
+                    className={`flex items-center gap-2 p-3 rounded-lg transition-all border cursor-pointer
+                               ${isChecked
+                                 ? 'bg-status-ready/10 border-status-ready/30'
+                                 : 'bg-tactical-card border-tactical-border hover:bg-tactical-elevated'}`}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <span className={`text-sm truncate block ${isChecked ? 'text-status-ready' : 'text-tactical-text'}`}>
+                        {item.name}
+                      </span>
+                      <span className="text-xs text-tactical-muted">
+                        {upgradeCount} upgrade{upgradeCount !== 1 ? 's' : ''} • Submitted: {formatNumber(marked)}/{formatNumber(item.totalRequired)}
+                        <span className="hidden sm:inline"> • Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{formatNumber(item.totalRequired - marked)}</span></span>
+                      </span>
+                      <span className="text-xs text-tactical-muted block sm:hidden mt-0.5">
+                        Remaining: <span className={marked >= item.totalRequired ? 'text-status-ready' : 'text-status-locked'}>{formatNumber(item.totalRequired - marked)}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {isChecked && (
+                        <Check className="w-7 h-7 text-status-ready" />
+                      )}
+                      {!isChecked && (
+                        <div className="w-7 h-7" />
+                      )}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setOverlayItem(item); }}
+                        className="w-7 h-7 flex items-center justify-center rounded hover:bg-tactical-elevated transition-colors text-tactical-muted hover:text-status-accent"
+                        title="Show upgrade details"
+                      >
+                        <Info className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        ))}
 
       {items.length === 0 && (
         <div className="text-center py-8 text-tactical-muted">
